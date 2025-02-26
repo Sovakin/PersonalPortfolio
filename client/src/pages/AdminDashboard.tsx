@@ -98,7 +98,7 @@ export default function AdminDashboard() {
     const formattedData = {
       ...data,
       technologies: data.technologies.split(",").map((t: string) => t.trim()),
-      screenshots: data.screenshots.split(",").map((s: string) => s.trim()),
+      screenshots: data.screenshots.map((s: string) => s.trim()),
     };
 
     if (editingProject) {
@@ -116,7 +116,7 @@ export default function AdminDashboard() {
     form.reset({
       ...project,
       technologies: project.technologies.join(", "),
-      screenshots: project.screenshots.join(", "),
+      screenshots: project.screenshots,
     });
     setIsDialogOpen(true);
   }
@@ -195,9 +195,76 @@ export default function AdminDashboard() {
                   name="screenshots"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Скриншоты (URL через запятую)</FormLabel>
+                      <FormLabel>Скриншоты</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            {field.value.map((url, index) => (
+                              <div key={url} className="relative aspect-video rounded-lg overflow-hidden">
+                                <img
+                                  src={url}
+                                  alt={`Screenshot ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                                <Button
+                                  variant="destructive"
+                                  size="icon"
+                                  className="absolute top-2 right-2"
+                                  onClick={() => {
+                                    const newScreenshots = [...field.value];
+                                    newScreenshots.splice(index, 1);
+                                    field.onChange(newScreenshots);
+                                  }}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <Input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={async (e) => {
+                                if (!e.target.files?.length) return;
+
+                                const formData = new FormData();
+                                Array.from(e.target.files).forEach((file) => {
+                                  formData.append("screenshots", file);
+                                });
+
+                                try {
+                                  const res = await fetch("/api/upload", {
+                                    method: "POST",
+                                    body: formData,
+                                    credentials: "include",
+                                  });
+
+                                  if (!res.ok) throw new Error("Upload failed");
+
+                                  const { urls } = await res.json();
+                                  field.onChange([...field.value, ...urls]);
+                                } catch (error) {
+                                  toast({
+                                    title: "Ошибка загрузки",
+                                    description: "Не удалось загрузить изображения",
+                                    variant: "destructive",
+                                  });
+                                }
+                              }}
+                              className="cursor-pointer"
+                            />
+                            {field.value.length > 0 && (
+                              <Button
+                                variant="outline"
+                                onClick={() => field.onChange([])}
+                              >
+                                Очистить все
+                              </Button>
+                            )}
+                          </div>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
