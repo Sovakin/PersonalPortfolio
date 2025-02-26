@@ -37,6 +37,7 @@ export function setupAuth(app: Express) {
     cookie: {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
+      httpOnly: true, // Added for enhanced security
     },
   };
 
