@@ -94,11 +94,15 @@ export default function AdminDashboard() {
   });
 
   function onSubmit(data: any) {
-    // Convert comma-separated strings to arrays
+    // Convert technologies string to array and clean up empty values
+    const technologies = data.technologies
+      .split(",")
+      .map((t: string) => t.trim())
+      .filter((t: string) => t.length > 0);
+
     const formattedData = {
       ...data,
-      technologies: data.technologies.split(",").map((t: string) => t.trim()),
-      screenshots: data.screenshots.map((s: string) => s.trim()),
+      technologies,
     };
 
     if (editingProject) {
@@ -115,8 +119,10 @@ export default function AdminDashboard() {
     setEditingProject(project);
     form.reset({
       ...project,
-      technologies: project.technologies.join(", "),
+      technologies: project.technologies.join(", "), // Join array to string for input
       screenshots: project.screenshots,
+      demoUrl: project.demoUrl || "",
+      githubUrl: project.githubUrl || "",
     });
     setIsDialogOpen(true);
   }
