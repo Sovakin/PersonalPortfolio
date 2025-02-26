@@ -182,9 +182,14 @@ export default function AdminDashboard() {
                   name="technologies"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Технологии (через запятую)</FormLabel>
+                      <FormLabel>Технологии</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <div className="space-y-2">
+                          <Input {...field} placeholder="React, TypeScript, Tailwind CSS" />
+                          <p className="text-sm text-muted-foreground">
+                            Введите технологии через запятую, например: React, TypeScript, Node.js
+                          </p>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -195,7 +200,7 @@ export default function AdminDashboard() {
                   name="screenshots"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Скриншоты</FormLabel>
+                      <FormLabel>Скриншоты (до 5 файлов, макс. 5MB каждый)</FormLabel>
                       <FormControl>
                         <div className="space-y-4">
                           <div className="grid grid-cols-2 gap-4">
@@ -221,48 +226,62 @@ export default function AdminDashboard() {
                               </div>
                             ))}
                           </div>
-                          <div className="flex items-center gap-4">
-                            <Input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              onChange={async (e) => {
-                                if (!e.target.files?.length) return;
+                          <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-4">
+                              <Input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={async (e) => {
+                                  if (!e.target.files?.length) return;
 
-                                const formData = new FormData();
-                                Array.from(e.target.files).forEach((file) => {
-                                  formData.append("screenshots", file);
-                                });
+                                  if (field.value.length + e.target.files.length > 5) {
+                                    toast({
+                                      title: "Слишком много файлов",
+                                      description: "Максимальное количество скриншотов - 5",
+                                      variant: "destructive",
+                                    });
+                                    return;
+                                  }
 
-                                try {
-                                  const res = await fetch("/api/upload", {
-                                    method: "POST",
-                                    body: formData,
-                                    credentials: "include",
+                                  const formData = new FormData();
+                                  Array.from(e.target.files).forEach((file) => {
+                                    formData.append("screenshots", file);
                                   });
 
-                                  if (!res.ok) throw new Error("Upload failed");
+                                  try {
+                                    const res = await fetch("/api/upload", {
+                                      method: "POST",
+                                      body: formData,
+                                      credentials: "include",
+                                    });
 
-                                  const { urls } = await res.json();
-                                  field.onChange([...field.value, ...urls]);
-                                } catch (error) {
-                                  toast({
-                                    title: "Ошибка загрузки",
-                                    description: "Не удалось загрузить изображения",
-                                    variant: "destructive",
-                                  });
-                                }
-                              }}
-                              className="cursor-pointer"
-                            />
-                            {field.value.length > 0 && (
-                              <Button
-                                variant="outline"
-                                onClick={() => field.onChange([])}
-                              >
-                                Очистить все
-                              </Button>
-                            )}
+                                    if (!res.ok) throw new Error("Upload failed");
+
+                                    const { urls } = await res.json();
+                                    field.onChange([...field.value, ...urls]);
+                                  } catch (error) {
+                                    toast({
+                                      title: "Ошибка загрузки",
+                                      description: "Не удалось загрузить изображения",
+                                      variant: "destructive",
+                                    });
+                                  }
+                                }}
+                                className="cursor-pointer"
+                              />
+                              {field.value.length > 0 && (
+                                <Button
+                                  variant="outline"
+                                  onClick={() => field.onChange([])}
+                                >
+                                  Очистить все
+                                </Button>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              Поддерживаемые форматы: JPG, PNG, GIF. Нажмите для выбора нескольких файлов.
+                            </p>
                           </div>
                         </div>
                       </FormControl>
