@@ -10,15 +10,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Navbar() {
   const [location] = useLocation();
+  const { user, logoutMutation } = useAuth();
 
   const links = [
     { href: "/", label: "Home" },
     { href: "/experience", label: "Experience" },
     { href: "/portfolio", label: "Portfolio" },
     { href: "/contact", label: "Contact" },
+    ...(user?.isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
   ];
 
   return (
@@ -43,6 +46,19 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+            {user ? (
+              <Button
+                variant="ghost"
+                onClick={() => logoutMutation.mutate()}
+                disabled={logoutMutation.isPending}
+              >
+                Выйти
+              </Button>
+            ) : (
+              <Link href="/auth" className="text-sm hover:text-primary">
+                Войти
+              </Link>
+            )}
           </div>
 
           {/* Mobile Navigation */}
@@ -70,6 +86,23 @@ export default function Navbar() {
                       {link.label}
                     </Link>
                   ))}
+                  {user ? (
+                    <Button
+                      variant="ghost"
+                      onClick={() => logoutMutation.mutate()}
+                      disabled={logoutMutation.isPending}
+                      className="justify-start px-2"
+                    >
+                      Выйти
+                    </Button>
+                  ) : (
+                    <Link
+                      href="/auth"
+                      className="text-sm hover:text-primary p-2 rounded-md"
+                    >
+                      Войти
+                    </Link>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
