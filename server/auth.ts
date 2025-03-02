@@ -30,14 +30,14 @@ async function comparePasswords(supplied: string, stored: string) {
 
 export function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    secret: process.env.SESSION_SECRET || "your-secret-key",
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
     cookie: {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      httpOnly: true, // Added for enhanced security
+      httpOnly: true,
     },
   };
 
@@ -47,17 +47,17 @@ export function setupAuth(app: Express) {
   app.use(passport.session());
 
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
-      try {
-        const user = await storage.getUserByUsername(username);
-        if (!user || !(await comparePasswords(password, user.password))) {
-          return done(null, false, { message: "Invalid username or password" });
+      new LocalStrategy(async (username, password, done) => {
+        try {
+          const user = await storage.getUserByUsername(username);
+          if (!user || !(await comparePasswords(password, user.password))) {
+            return done(null, false, { message: "Invalid username or password" });
+          }
+          return done(null, user);
+        } catch (err) {
+          return done(err);
         }
-        return done(null, user);
-      } catch (err) {
-        return done(err);
-      }
-    }),
+      }),
   );
 
   passport.serializeUser((user, done) => done(null, user.id));
@@ -92,7 +92,11 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", (
+        err: Error | null,
+        user: Express.User | false,
+        info?: { message: string }
+    ) => {
       if (err) return next(err);
       if (!user) {
         return res.status(401).json({ message: info?.message || "Authentication failed" });

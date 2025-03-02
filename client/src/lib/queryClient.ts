@@ -8,11 +8,13 @@ async function throwIfResNotOk(res: Response) {
 }
 
 export async function apiRequest(
-  method: string,
-  url: string,
-  data?: unknown | undefined,
+    method: string,
+    url: string,
+    data?: unknown | undefined,
 ): Promise<Response> {
-  const res = await fetch(url, {
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://emolut.ru" : "http://localhost:5000";
+  const fullUrl = url.startsWith("http") ? url : `${baseUrl}${url}`; // Добавляем базовый URL, если путь относительный
+  const res = await fetch(fullUrl, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
@@ -27,19 +29,21 @@ type UnauthorizedBehavior = "returnNull" | "throw";
 export const getQueryFn: <T>(options: {
   on401: UnauthorizedBehavior;
 }) => QueryFunction<T> =
-  ({ on401: unauthorizedBehavior }) =>
-  async ({ queryKey }) => {
-    const res = await fetch(queryKey[0] as string, {
-      credentials: "include",
-    });
+    ({ on401: unauthorizedBehavior }) =>
+        async ({ queryKey }) => {
+          const baseUrl = process.env.NODE_ENV === "production" ? "https://emolut.ru" : "http://localhost:5000";
+          const fullUrl = `${baseUrl}${queryKey[0]}`; // Обновляем URL для queryKey
+          const res = await fetch(fullUrl, {
+            credentials: "include",
+          });
 
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
-    }
+          if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+            return null;
+          }
 
-    await throwIfResNotOk(res);
-    return await res.json();
-  };
+          await throwIfResNotOk(res);
+          return await res.json();
+        };
 
 export const queryClient = new QueryClient({
   defaultOptions: {

@@ -8,19 +8,19 @@ export default function Contact() {
     {
       icon: Mail,
       label: "Email",
-      value: "your.email@example.com",
-      href: "mailto:your.email@example.com"
+      value: "fintop4ik@gmail.com",
+      href: "mailto:fintop4ik@gmail.com"
     },
     {
       icon: Phone,
-      label: "Phone",
-      value: "+1 (234) 567-8900",
+      label: "Телефон",
+      value: "не скажу))",
       href: "tel:+12345678900"
     },
     {
       icon: MapPin,
-      label: "Location",
-      value: "San Francisco, CA"
+      label: "Город",
+      value: "Россия, г.Рязань"
     }
   ];
 
@@ -31,11 +31,11 @@ export default function Contact() {
       exit={{ opacity: 0, y: 20 }}
       className="max-w-4xl mx-auto"
     >
-      <h1 className="text-3xl font-bold mb-8">Contact Me</h1>
+      <h1 className="text-3xl font-bold mb-8">Контакты</h1>
 
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Let's Connect</CardTitle>
+          <CardTitle>Какие-то там данные...</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-6">
@@ -63,7 +63,7 @@ export default function Contact() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Social Media</CardTitle>
+          <CardTitle>Социальные сети</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex justify-center">

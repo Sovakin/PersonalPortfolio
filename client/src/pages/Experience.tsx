@@ -4,25 +4,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function Experience() {
   const experiences = [
     {
-      company: "Tech Company",
-      position: "Senior Frontend Developer",
-      period: "2021 - Present",
-      description: "Led the development of multiple React applications, implemented new features, and improved performance.",
+      company: "Хакатон-1",
+      position: "Junior Frontend Developer",
+      period: "Май 2024г.",
+      description: "Первый хакатон был организован университетом «Синергия» в формате LAN. Этот хакатон не увенчался большим успехом, но стал хорошим стартом для дальнейшего развития.",
       achievements: [
-        "Reduced bundle size by 40% through code splitting and lazy loading",
-        "Implemented CI/CD pipeline reducing deployment time by 60%",
-        "Mentored junior developers and conducted code reviews"
+        "Моя задача заключалась в создании макета сайта в Figma и его верстке",
+        "Верстка была выполнена на чистом HTML и CSS",
       ]
     },
     {
-      company: "Startup Inc",
-      position: "Frontend Developer",
-      period: "2019 - 2021",
-      description: "Worked on building responsive web applications using React and TypeScript.",
+      company: "Хакатон-2",
+      position: "Junior Frontend Developer",
+      period: "Октябрь 2024г.",
+      description: "Второй хакатон был посвящён разработке чат-ассистента для компании Ростелеком, который должен был заменить до 70% работы сотрудников Call-центров. Сайт был разработан на фреймворке Next.js с использованием различных библиотек. Этот хакатон стал более успешным: я занял второе место и получили предложение о работе в Ростелеком.",
       achievements: [
-        "Developed reusable component library used across multiple projects",
-        "Integrated third-party APIs and implemented real-time features",
-        "Improved application accessibility to meet WCAG standards"
+        "Разрабатывал чат-бота и frontend часть сайта (главную страницу и сам чат)",
+        "Занимался настройкой сервера и подключением домена",
+      ]
+    },
+    {
+      company: "Хакатон-3",
+      position: "Junior Frontend Developer",
+      period: "Декабрь 2024г.",
+      description: "Третий хакатон был всероссийским и организован Федерацией спортивного программирования. Он проводился в онлайн-формате, и задача заключалась в разработке сайта \"Календарь спортивных событий\". На первом этапе мы заняли 16-е место в России и 2-е место в своём городе, что позволило нам попасть в финал онлайн-этапа. К сожалению, в финале мы не вошли в топ-5, что не позволило нам пройти на LAN-стадию соревнований. Тем не менее, для меня этот хакатон стал наиболее результативным, так как я проявил высокий интерес и вложил много усилий в работу.",
+      achievements: [
+        "Разрабатывал макет сайта",
+        "Верстал макет",
+        "Интегрировал Frontend и Backend части"
       ]
     }
   ];
@@ -34,7 +43,7 @@ export default function Experience() {
       exit={{ opacity: 0, y: 20 }}
       className="max-w-4xl mx-auto"
     >
-      <h1 className="text-3xl font-bold mb-8">Work Experience</h1>
+      <h1 className="text-3xl font-bold mb-8">Опыт работы</h1>
       
       <div className="space-y-6">
         {experiences.map((exp, index) => (

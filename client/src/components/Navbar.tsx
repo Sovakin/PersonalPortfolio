@@ -17,18 +17,18 @@ export default function Navbar() {
   const { user, logoutMutation } = useAuth();
 
   const links = [
-    { href: "/", label: "Home" },
-    { href: "/experience", label: "Experience" },
-    { href: "/portfolio", label: "Portfolio" },
-    { href: "/contact", label: "Contact" },
-    ...(user?.isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
+    { href: "/", label: "Главная" },
+    { href: "/experience", label: "Опыт работы" },
+    { href: "/portfolio", label: "Портфолио" },
+    { href: "/contact", label: "Контакты" },
+    ...(user?.isAdmin ? [{ href: "/admin", label: "Админ-панель" }] : []),
   ];
 
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold">
-          Portfolio
+          emolut.dev
         </Link>
 
         <div className="flex items-center gap-6">
@@ -71,7 +71,7 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Menu</SheetTitle>
+                  <SheetTitle>Меню</SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-4 mt-6">
                   {links.map((link) => (

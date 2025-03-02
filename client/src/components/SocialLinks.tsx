@@ -1,4 +1,4 @@
-import { SiGithub, SiLinkedin, SiMastodon } from "react-icons/si";
+import {SiGithub, SiLinkedin, SiMastodon, SiSteam, SiTelegram, SiVk} from "react-icons/si";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -10,14 +10,14 @@ export default function SocialLinks() {
       url: "https://github.com/yourusername",
     },
     {
-      name: "LinkedIn",
-      icon: SiLinkedin, 
-      url: "https://linkedin.com/in/yourusername",
+      name: "Telegram",
+      icon: SiTelegram,
+      url: "https://t.me/emolutQQ",
     },
     {
       name: "Mastodon",
-      icon: SiMastodon,
-      url: "https://mastodon.social/@yourusername",
+      icon: SiVk,
+      url: "https://vk.com/name_oleg",
     },
   ];
 
