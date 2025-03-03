@@ -75,7 +75,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <h2 className="text-3xl font-bold mb-4">Об о мне</h2>
+        <h2 className="text-3xl font-bold mb-4">Обо мне</h2>
         <p className="text-lg text-muted-foreground">
           Я frontend-разработчик с опытом создания современных веб-приложений.
           Опираясь на React и TypeScript (частично Next.JS), я создаю адаптивные и удобные
