@@ -7,7 +7,7 @@ export default function SocialLinks() {
     {
       name: "GitHub",
       icon: SiGithub,
-      url: "https://github.com/yourusername",
+      url: "https://github.com/Sovakin",
     },
     {
       name: "Telegram",

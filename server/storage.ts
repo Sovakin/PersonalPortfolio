@@ -15,19 +15,16 @@ import { pool } from "./db";
 const PostgresSessionStore = connectPg(session);
 
 export interface IStorage {
-  // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
 
-  // Project operations
   getProjects(): Promise<Project[]>;
   getProject(id: number): Promise<Project | undefined>;
   createProject(project: InsertProject, authorId: number): Promise<Project>;
   updateProject(id: number, project: Partial<InsertProject>): Promise<Project>;
   deleteProject(id: number): Promise<void>;
 
-  // Session store
   sessionStore: session.Store;
 }
 
@@ -41,7 +38,6 @@ export class DatabaseStorage implements IStorage {
     });
   }
 
-  // User operations
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
@@ -57,7 +53,6 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  // Project operations
   async getProjects(): Promise<Project[]> {
     return await db.select().from(projects).orderBy(projects.createdAt);
   }

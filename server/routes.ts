@@ -8,7 +8,6 @@ import path from "path";
 import fs from "fs";
 import express from 'express';
 
-// Создаем папку для загрузки файлов, если её нет
 const uploadsDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -27,7 +26,7 @@ const storageConfig = multer.diskStorage({
 const upload = multer({ 
   storage: storageConfig,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024
   },
   fileFilter: (_req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif/;
@@ -56,13 +55,10 @@ function isAdmin(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Set up authentication
   setupAuth(app);
 
-  // Serve uploaded files statically
   app.use("/uploads", express.static(uploadsDir));
 
-  // Public routes
   app.get("/api/projects", async (_req, res) => {
     const projects = await storage.getProjects();
     res.json(projects);
@@ -76,14 +72,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(project);
   });
 
-  // File upload endpoint
   app.post("/api/upload", isAdmin, upload.array("screenshots", 5), (req, res) => {
     const files = req.files as Express.Multer.File[];
     const fileUrls = files.map(file => `/uploads/${file.filename}`);
     res.json({ urls: fileUrls });
   });
 
-  // Protected admin routes
   app.post("/api/projects", isAdmin, async (req, res) => {
     try {
       const projectData = insertProjectSchema.parse(req.body);
